@@ -34,7 +34,8 @@ public class NPuzzleProblem extends Problem {
     }*/
 
     //计算逆序数对
-   public static int getReverseNumberCount(PuzzleBoard status)
+   //public static int getReverseNumberCount(byte[][] state)
+    public static int getReverseNumberCount(PuzzleBoard status)
    {
        byte [][] temp= status.getPuzzle_board();
        int size=status.getSize();
@@ -66,6 +67,17 @@ public class NPuzzleProblem extends Problem {
            }
        }
        return ans;
+       /*
+       int res = 0;
+       for (int i = 0; i < size * size - 1; i++){
+           for (int j= i + 1; j < size * size; j++){
+               int x1 = i / size, y1 = i % size, x2 = j / size, y2 = j % size;
+               if (state[x2][y2] == 0) continue;
+               if (state[x2][y2] < state[x1][y1]) res++;
+           }
+       }
+       return res;*/
+
    }
     //返回初始状态State
     public State getInitialState() {
@@ -88,6 +100,15 @@ public class NPuzzleProblem extends Problem {
         int initOdd=initialStatusRN%2;
         int goalOdd=goalStatusRN%2;
         return initOdd==goalOdd;
+        //判断initState和goal的逆序对个数
+      /*  byte[][] start = ((PuzzleBoard)getInitialState()).getPuzzle_board();
+        byte[][] goal = ((PuzzleBoard)getGoalState()).getPuzzle_board();
+        int cnt_s = getReverseNumberCount(start);
+        int cnt_g = getReverseNumberCount(goal);
+        int os = cnt_s % 2, og = cnt_g % 2;
+        //判断奇偶性是否相等
+        return os == 0;*/
+
     }
 
     @Override

@@ -167,7 +167,7 @@ public class DataBaseCreate {
         System.out.println("finished all epoch is"+epoch);
     }
     private static void writeToFile(String filePreName, int index) throws FileNotFoundException {
-        TreeMap<Integer,Integer> temp=new TreeMap<>();//去重并保留最小代价
+        /*TreeMap<Integer,Integer> temp=new TreeMap<>();//去重并保留最小代价
         String path="./"+filePreName+"_"+index+".txt";
         File file=new File(path);
 
@@ -194,8 +194,61 @@ public class DataBaseCreate {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        stateCost.clear();//清空临时数据
-    }
+        stateCost.clear();//清空临时数据*/
+        TreeMap<Integer, Integer> tmp = new TreeMap<>();
+        String path = "./" + filePreName + "_" + index + ".txt";
+        File file = new File(path);
+        FileOutputStream fileOut;
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fileOut = new FileOutputStream(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        int state, cost;
+        Iterator iter = DataBaseCreate.stateCost.entrySet().iterator();
+        Map.Entry entry;
+
+        while (iter.hasNext()) {
+            entry = (Map.Entry) iter.next();
+            state = ((int) entry.getKey()) >> 4;
+            cost = (int) entry.getValue();
+            if (tmp.containsKey(state)) {
+                tmp.put(state, Math.min(cost, tmp.get(state)));
+            } else {
+                tmp.put(state, cost);
+            }
+        }
+
+        Iterator it = tmp.entrySet().iterator();
+        while (it.hasNext()) {
+            entry = (Map.Entry) it.next();
+            state = (int) entry.getKey();
+            cost = (int) entry.getValue();
+            try {
+                fileOut.write(state);
+                fileOut.write(' ');
+                fileOut.write(cost);
+                fileOut.write('\n');
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        // stateCost映射清空
+        stateCost.clear();
+        try {
+            fileOut.close();
+            System.out.println("file closed successfully");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+}
 
 
 }
