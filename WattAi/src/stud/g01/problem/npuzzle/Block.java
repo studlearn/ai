@@ -64,4 +64,12 @@ public class Block {
             Block.belongs.set(slides[i], this.order);//更新belongs：格子属于当前块order
         }
     }
+    public static void reset() {
+        Block.num = 0;
+        Block.belongs.clear();
+        for (int i = 0; i < 16; i++) {
+            Block.belongs.add(0);
+        }
+    }
+
 }

@@ -52,13 +52,41 @@ public class IdAStar extends AbstractSearcher {
         //生成node结点之后的所有合法结点
         List<Node> childNodes = problem.childNodes(node, predictor);
 
-        for (var child : childNodes){
+       /* for (var child : childNodes){
             explored.add(child.getState().hashCode());
             if (!(fa == null || !child.getState().equals(fa.getState())))  continue;
             if (child.evaluation() <= depth && dfs(child, node, depth))  return true;
+        }*/
+        for (var child : childNodes) {
+            int hash = child.getState().hashCode();
+            if (explored.contains(hash)) continue; // ? 已访问则跳过
+            explored.add(hash);
+
+            if (!(fa == null || !child.getState().equals(fa.getState()))) continue;
+
+            if (child.evaluation() <= depth && dfs(child, node, depth)) return true;
+        }
+
+        return false;
+    }/*public boolean dfs(Node node, Node fa, int depth, Set<Long> visited) {
+        long hash = node.getState().getHash();
+        if (visited.contains(hash)) return false;
+        visited.add(hash);
+
+        if (problem.goal(node.getState())) {
+            path = generatePath(node);
+            return true;
+        }
+        expanded.add(hash);
+
+        List<Node> childNodes = problem.childNodes(node, predictor);
+        for (var child : childNodes) {
+            if (child.evaluation() <= depth && dfs(child, node, depth, visited)) return true;
         }
         return false;
-    }
+    }*/
+
+
     public IdAStar(Frontier frontier) {
         super(frontier);
     }

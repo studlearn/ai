@@ -21,6 +21,7 @@ public class DataBaseCreate {
     //存储状态与对应cost（距离）的映射，临时用于BFS计算
     public static TreeMap<Integer,Integer>stateCost;
     //已加载的数据库表：每个元素对应一个block的数据库
+
     public static ArrayList<ArrayList<Integer>> Table = new ArrayList<>() {{
         add(DataBaseCreate.readFromFile("resources/663_0.txt"));
         add(DataBaseCreate.readFromFile("resources/663_1.txt"));
@@ -52,6 +53,7 @@ public class DataBaseCreate {
         return temp;
     }
     public static void create(String filePreName,Block... blocks) throws FileNotFoundException {
+        Block.reset();
         int i=0;
         for(Block b:blocks){
             System.out.println("this the "+i+"block");
@@ -246,9 +248,5 @@ public class DataBaseCreate {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
 }
-
-
 }

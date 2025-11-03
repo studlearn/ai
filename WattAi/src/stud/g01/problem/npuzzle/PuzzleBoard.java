@@ -97,6 +97,7 @@ public class PuzzleBoard extends State {
         }
     }
 
+
     public static ArrayList<Block>blocks_663=new ArrayList<>(){
         {
             add(new Block(1,5,6,9,10,13));
@@ -258,15 +259,27 @@ public class PuzzleBoard extends State {
             moves.add(new Move(d));
         return moves;
     }
-    //重写equals方法判断两个棋盘的状态是否完全相同
+    @Override
     public boolean equals(Object obj) {
-        PuzzleBoard another = (PuzzleBoard) obj;
-        for(int i = 0; i < this.size; i++)
-            for(int j = 0;j < this.size; j++)
-                if (this.puzzle_board[i][j] != another.puzzle_board[i][j])
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        PuzzleBoard other = (PuzzleBoard) obj;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (this.puzzle_board[i][j] != other.puzzle_board[i][j]) {
                     return false;
+                }
+            }
+        }
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        // ? 高效：用已有 hashNum（Zobrist 哈希）即可直接作为哈希码
+        return hashNum;
+    }
+
 
     /*
     * 计算线性冲突的数量的函数
@@ -314,6 +327,9 @@ public class PuzzleBoard extends State {
         predictors.put(LINEAR_CONFLICT, (state, goal) -> ((PuzzleBoard) state).getLinearConflictDistance());
         predictors.put(MANHATTAN, (state, goal) -> ((PuzzleBoard) state).getManhattanDistance());
         predictors.put(MISPLACED, (state, goal) -> ((PuzzleBoard) state).getMisplacedDistance());
-        //predictors.put(DISJOINT_PATTERN, (state, goal) -> ((PuzzleBoard) state).getDataBaseDistance663());
+        predictors.put(DISJOINT_PATTERN, (state, goal) -> ((PuzzleBoard) state).getDataBaseDistance663());
+    }
+    public int getDataBaseDistance663() {
+        return Math.max(DataBaseCreate.getDistance(puzzle_board, blocks_663), getLinearConflictDistance());
     }
 }
